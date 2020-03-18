@@ -1,0 +1,26 @@
+Arguments: 
+  /Users/ferene/.virtualenvs/kizpix/bin/node /Users/ferene/.virtualenvs/kizpix/bin/yarn --verbose
+
+PATH: 
+  /Users/ferene/.virtualenvs/kizpix/lib/node_modules/.bin:/Users/ferene/.virtualenvs/kizpix/bin:/Users/ferene/.virtualenvs/kizpix/bin:/Users/ferene/.nvm/versions/node/v10.19.0/bin:/usr/local/bin/python:/Users/ferene/bin:/usr/local/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/Cellar/rabbitmq/3.8.0/sbin/
+
+Yarn version: 
+  1.22.0
+
+Node version: 
+  12.8.0
+
+Platform: 
+  darwin x64
+
+Trace: 
+  Error: EISDIR: illegal operation on a directory, read
+
+npm manifest: 
+  No manifest
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
