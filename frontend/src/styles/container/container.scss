@@ -1,0 +1,12 @@
+@import '../base/variables.scss';
+
+.ci-container {
+    &__wrapper {
+        height: 100vh;
+    }
+
+    &__inner {
+        padding: 2rem;
+        height: 100%;
+    }
+}

@@ -6,3 +6,7 @@ htmlcov
 
 *.pyc
 *.log
+
+node_modules
+/node_modules
+/crimpit/node_modules
