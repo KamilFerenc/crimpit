@@ -1,8 +1,15 @@
-.idea
+/.idea/
+
 # coverage
 .coverage
 .coverage.*
+.DS_Store
 htmlcov
 
 *.pyc
 *.log
+
+# project files
+/media/
+/logs/
+/backup/
