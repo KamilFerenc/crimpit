@@ -1,0 +1,26 @@
+.ci-landing-page {
+    &__wrapper {
+        height: 80vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    &__logo-wrapper {
+        display: flex;
+        justify-content: center;
+    }
+
+    &__feature-title {
+        text-align: center;
+    }
+
+    &__feature-image {
+        width: 10rem;
+    }
+
+    &__features-signup {
+        display: flex;
+        justify-content: center;
+    }
+}
