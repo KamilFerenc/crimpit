@@ -1,12 +1,12 @@
 from rest_framework import serializers
 
-from crimpit.accounts.models import CustomUser, COACH, ATHLETE
+from crimpit.accounts.models import CustomUser, TRAINER, ATHLETE
 
 
 class CustomUserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
     password_2 = serializers.CharField(write_only=True)
-    type = serializers.ChoiceField(choices=(COACH, ATHLETE))
+    type = serializers.ChoiceField(choices=(TRAINER, ATHLETE))
     email = serializers.EmailField(required=True)
 
     class Meta:

@@ -2,7 +2,7 @@ from django.test import TestCase
 
 from django.utils import timezone
 
-from crimpit.accounts.models import COACH, CustomUser
+from crimpit.accounts.models import TRAINER
 from crimpit.accounts.serializers import CustomUserSerializer
 
 
@@ -14,7 +14,7 @@ class CustomUserSerializerTest(TestCase):
             'email': 'test@test.com',
             'password': 'password',
             'password_2': 'password',
-            'type': COACH,
+            'type': TRAINER,
             'club': 'KS KORONA'
         }
 

@@ -7,11 +7,11 @@ from django.utils.translation import ugettext_lazy as _
 
 from crimpit.accounts.validators import validate_birth_date, validate_start_climbing
 
-COACH = 'coach'
+TRAINER = 'trainer'
 ATHLETE = 'athlete'
 
 USER_TYPE = (
-    (COACH, _('Coach')),
+    (TRAINER, _('Trainer')),
     (ATHLETE, _('Athlete'))
 )
 
@@ -51,7 +51,7 @@ class Athlete(CustomUser):
 
 class TrainerManager(BaseUserManager):
     def get_queryset(self, *args, **kwargs):
-        return super(TrainerManager, self).get_queryset().filter(type=COACH, *args, **kwargs)
+        return super(TrainerManager, self).get_queryset().filter(type=TRAINER, *args, **kwargs)
 
 
 class Trainer(CustomUser):
