@@ -4,7 +4,7 @@ from rest_framework.exceptions import ValidationError
 
 
 def validate_birth_date(value):
-    if value >= timezone.datetime.today():
+    if value >= timezone.datetime.today().date():
         raise ValidationError(_('Enter date from the past'))
 
 

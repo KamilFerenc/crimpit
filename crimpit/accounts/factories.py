@@ -1,11 +1,20 @@
 import factory
+from django.contrib.auth.models import User
 
-from crimpit.accounts.models import Athlete
+from crimpit.accounts.models import CustomUser
 
 
 class UserFactory(factory.django.DjangoModelFactory):
     class Meta:
-        model = Athlete
+        model = User
 
     username = factory.Sequence(lambda n: f'User_{n}')
+    email = factory.Sequence(lambda n: 'user{0}@example.com'.format(n))
+    password = factory.PostGenerationMethodCall('set_password', 'pass')
+
+
+class CustomUserFactory(UserFactory):
+    class Meta:
+        model = CustomUser
+
     club = factory.Sequence(lambda n: f'Club_{n}')
