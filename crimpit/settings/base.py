@@ -46,6 +46,7 @@ INSTALLED_APPS = [
 
 PROJECT_APPS = [
     'crimpit.accounts',
+    'crimpit.tests',
 ]
 
 INSTALLED_APPS += PROJECT_APPS

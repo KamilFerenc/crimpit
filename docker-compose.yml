@@ -22,6 +22,8 @@ services:
     links:
       - wdb
       - db
+    restart: always
+
 
   wdb:
     image: kozea/wdb
