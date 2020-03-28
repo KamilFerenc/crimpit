@@ -21,7 +21,8 @@ class CustomUser(AbstractUser):
 
     type = models.CharField(verbose_name=_('User type'), max_length=50, choices=USER_TYPE, default=ATHLETE)
     club = models.CharField(verbose_name=_('Sport Club'), max_length=50)
-    birth_date = models.DateField(verbose_name=_('Birth date'), null=True, blank=True, validators=[validate_birth_date])
+    birth_date = models.DateField(verbose_name=_('Birth date'), null=True, blank=True,
+                                  validators=[validate_birth_date])
     start_climbing = models.PositiveIntegerField(verbose_name=_('Start climbing - year'), null=True, blank=True,
                                                  validators=[validate_start_climbing])
     profile_photo = models.ImageField(verbose_name=_('Profile photo'), blank=True,

@@ -1,9 +1,9 @@
-from rest_framework.decorators import permission_classes
-from rest_framework.generics import ListCreateAPIView, ListAPIView, CreateAPIView
+from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveUpdateAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
-from crimpit.accounts.models import Athlete, Trainer
+from crimpit.accounts.models import Athlete, Trainer, CustomUser
+from crimpit.accounts.permissions import IsOwnerOrReadOnly
 from crimpit.accounts.serializers import CustomUserSerializer
 
 
@@ -34,3 +34,12 @@ class TrainersList(AthletesList):
 
 
 trainers_list_api_view = TrainersList.as_view()
+
+
+class DetailUpdateUserApiView(RetrieveUpdateAPIView):
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
+    serializer_class = CustomUserSerializer
+    queryset = CustomUser.objects.all()
+
+
+detail_update_user_api_view = DetailUpdateUserApiView.as_view()

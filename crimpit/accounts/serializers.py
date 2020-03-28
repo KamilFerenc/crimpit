@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+
 from crimpit.accounts.models import CustomUser, TRAINER, ATHLETE
 
 
@@ -15,8 +16,8 @@ class CustomUserSerializer(serializers.ModelSerializer):
                   'profile_photo', 'phone', 'city')
 
     def validate(self, data):
-        password = data['password']
-        password_2 = data['password_2']
+        password = data.get('password', None)
+        password_2 = data.get('password_2', None)
         if password != password_2:
             raise serializers.ValidationError({
                 'password': 'Password don\'t match.',
