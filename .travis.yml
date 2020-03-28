@@ -1,0 +1,19 @@
+language: python
+python:
+  - "3.8"
+
+services:
+  - docker
+
+script:
+  - docker-compose run backend sh -c "python ./manage.py test && flake8"
+
+after_success:
+  - coveralls
+
+notifications:
+  email:
+    recipients:
+      - kamilferenc91@gmail.com
+    on_success: never
+    on_failure: always
