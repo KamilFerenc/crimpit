@@ -20,8 +20,9 @@ class Migration(migrations.Migration):
                 ('modified', models.DateTimeField(auto_now=True, verbose_name='Created')),
                 ('created', models.DateTimeField(auto_now_add=True, verbose_name='Created')),
                 ('title', models.CharField(max_length=255, verbose_name='Title')),
-                ('testy_type', models.CharField(choices=[('campus_board', 'Campus board'), ('hangboard', 'Hangboard')],
-                                                default='hangboard', max_length=255, verbose_name='Level')),
+                ('exercise_type',
+                 models.CharField(choices=[('campus_board', 'Campus board'), ('hangboard', 'Hangboard')],
+                                  default='hangboard', max_length=255, verbose_name='Level')),
                 ('image',
                  models.ImageField(blank=True, help_text='Add image how exercise should look like', upload_to='',
                                    verbose_name='Image')),
@@ -47,8 +48,8 @@ class Migration(migrations.Migration):
                 ('title', models.CharField(max_length=255, verbose_name='Title')),
                 ('level', models.CharField(choices=[('beginner', 'Beginner'), ('advanced', 'Advanced'), ('pro', 'Pro')],
                                            default='advanced', max_length=255, verbose_name='Level')),
-                ('testy_type', models.CharField(choices=[('campus_board', 'Campus board'), ('hangboard', 'Hangboard')],
-                                                default='hangboard', max_length=255, verbose_name='Level')),
+                ('test_type', models.CharField(choices=[('campus_board', 'Campus board'), ('hangboard', 'Hangboard')],
+                                               default='hangboard', max_length=255, verbose_name='Level')),
                 ('promoted',
                  models.BooleanField(default=False, help_text='If True, test set will be promoted on the website')),
                 ('private', models.BooleanField(default=False,
@@ -56,8 +57,9 @@ class Migration(migrations.Migration):
                                                           "creator or creator's athletes")),
                 ('creator', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL,
                                               verbose_name='Creator')),
-                ('exercise',
-                 models.ManyToManyField(related_name='test_sets', to='tests.Exercise', verbose_name='Exercises')),
+                ('exercises',
+                 models.ManyToManyField(related_name='test_sets', blank=True,
+                                        to='tests.Exercise', verbose_name='Exercises')),
             ],
             options={
                 'abstract': False,
@@ -103,7 +105,7 @@ class Migration(migrations.Migration):
             bases=('tests.exercise',),
         ),
         migrations.CreateModel(
-            name='HangboardTest',
+            name='HangboardTestSet',
             fields=[
             ],
             options={

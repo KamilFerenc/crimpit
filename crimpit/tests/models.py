@@ -26,12 +26,13 @@ class TestSet(TimeStampModel):
     title = models.CharField(verbose_name=_('Title'), max_length=255)
     level = models.CharField(verbose_name=_('Level'), max_length=255, default=ADVANCED, choices=LEVEL_CHOICES)
     creator = models.ForeignKey('accounts.CustomUser', verbose_name=_('Creator'), on_delete=models.CASCADE)
-    testy_type = models.CharField(verbose_name=_('Level'), max_length=255,
-                                  default=HANGBOARD, choices=TYPE_CHOICES)
+    test_type = models.CharField(verbose_name=_('Test Type'), max_length=255,
+                                 default=HANGBOARD, choices=TYPE_CHOICES)
     promoted = models.BooleanField(default=False, help_text=_('If True, test set will be promoted on the website'))
     private = models.BooleanField(default=False, help_text=_('If True, test set will be visible only for '
                                                              'creator or creator\'s athletes'))
-    exercise = models.ManyToManyField('tests.Exercise', verbose_name=_('Exercises'), related_name='test_sets')
+    exercises = models.ManyToManyField('tests.Exercise', verbose_name=_('Exercises'),
+                                       blank=True, related_name='test_sets')
 
     def __str__(self):
         return f'{self.pk} - {self.title}'
@@ -39,7 +40,7 @@ class TestSet(TimeStampModel):
 
 class CampusTestSetManager(models.Manager):
     def get_queryset(self, *args, **kwargs):
-        return self.get_queryset().filter(test_type=CAMPUS_BOARD, *args, **kwargs)
+        return super(CampusTestSetManager, self).get_queryset().filter(test_type=CAMPUS_BOARD, *args, **kwargs)
 
 
 class CampusTestSet(TestSet):
@@ -53,10 +54,10 @@ class CampusTestSet(TestSet):
 
 class HangboardTestSetManager(models.Manager):
     def get_queryset(self, *args, **kwargs):
-        return self.get_queryset().filter(test_type=HANGBOARD, *args, **kwargs)
+        return super(HangboardTestSetManager, self).get_queryset().filter(test_type=HANGBOARD, *args, **kwargs)
 
 
-class HangboardTest(TestSet):
+class HangboardTestSet(TestSet):
     class Meta:
         proxy = True
         verbose_name = _('Hangboard Test Set')
@@ -68,8 +69,8 @@ class HangboardTest(TestSet):
 class Exercise(TimeStampModel):
     title = models.CharField(verbose_name=_('Title'), max_length=255)
     creator = models.ForeignKey('accounts.CustomUser', verbose_name=_('Creator'), on_delete=models.CASCADE)
-    testy_type = models.CharField(verbose_name=_('Level'), max_length=255,
-                                  default=HANGBOARD, choices=TYPE_CHOICES)
+    exercise_type = models.CharField(verbose_name=_('Level'), max_length=255,
+                                     default=HANGBOARD, choices=TYPE_CHOICES)
     image = models.ImageField(verbose_name=_('Image'), blank=True,
                               help_text=_('Add image how exercise should look like'))
     private = models.BooleanField(default=False, help_text=_('If True, test set will be visible only for '
@@ -87,7 +88,7 @@ class Exercise(TimeStampModel):
 
 class CampusExerciseManager(models.Manager):
     def get_queryset(self, *args, **kwargs):
-        return self.get_queryset().filter(test_type=CAMPUS_BOARD, *args, **kwargs)
+        return super(CampusExerciseManager, self).get_queryset().filter(test_type=CAMPUS_BOARD, *args, **kwargs)
 
 
 class CampusExercise(Exercise):
@@ -96,12 +97,12 @@ class CampusExercise(Exercise):
         verbose_name = _('Campus Exercise')
         verbose_name_plural = _('Campus Exercises')
 
-    objects = CampusExerciseManager()
+    objects = CampusExerciseManager
 
 
 class HangboardExerciseManager(models.Manager):
     def get_queryset(self, *args, **kwargs):
-        return self.get_queryset().filter(test_type=HANGBOARD, *args, **kwargs)
+        return super(HangboardExerciseManager, self).get_queryset().filter(test_type=HANGBOARD, *args, **kwargs)
 
 
 class HangboardExercise(Exercise):
