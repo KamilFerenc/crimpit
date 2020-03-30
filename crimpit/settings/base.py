@@ -143,7 +143,7 @@ STATICFILES_DIRS = [
 MEDIA_ROOT = PROJECT_DIR.joinpath('media')
 MEDIA_URL = '/media/'
 
-LOGIN_REDIRECT_URL = 'trainers-list'
+LOGIN_REDIRECT_URL = 'trainers_list'
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
