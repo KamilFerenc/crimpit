@@ -2,8 +2,9 @@ from django.test import TestCase
 from django.urls import reverse
 from rest_framework.test import APIClient
 
-from crimpit.accounts.factories import UserFactory
-from crimpit.accounts.models import TRAINER, CustomUser
+from crimpit.accounts.factories import CustomUserFactory
+from crimpit.accounts.models import TRAINER, CustomUser, ATHLETE
+from crimpit.helpers.tests.mixin import ViewTestMixin
 
 
 class CreateUserApiTest(TestCase, APIClient):
@@ -48,10 +49,42 @@ class CreateUserApiTest(TestCase, APIClient):
 
 class AthletesListTest(TestCase, APIClient):
     def setUp(self):
-        self.athlete_1 = UserFactory()
-        self.athlete_2 = UserFactory()
+        self.athlete_1 = CustomUserFactory()
+        self.athlete_2 = CustomUserFactory()
         self.client = APIClient()
 
     def test_get_request(self):
         resp = self.client.get(reverse('athletes-list'))
         self.assertEqual(resp.status_code, 403)
+
+
+class DetailUpdateUserApiViewTest(ViewTestMixin, TestCase, APIClient):
+    def setUp(self) -> None:
+        self.tmp_file = self.crete_image()
+        self.data = {
+            'club': 'new_club',
+            'type': ATHLETE,
+        }
+        self.user = CustomUserFactory(profile_photo=self.tmp_file.name)
+        self.client = APIClient()
+        self.login(self.user)
+        self.url = reverse('user-detail', kwargs={'pk': self.user.pk})
+
+    def test_valid_data(self):
+        resp = self.client.patch(self.url, data=self.data, format='multipart')
+        self.assert_resp_ok(resp)
+        self.user.refresh_from_db()
+        self.assertEqual(self.user.club, self.data['club'])
+        self.assertEqual(self.user.type, self.data['type'])
+
+    def test_invalid_type(self):
+        self.data['type'] = 'test'
+        resp = self.client.patch(self.url, data=self.data, format='json')
+        self.assertEqual(resp.status_code, 400)
+        self.assertIn('type', str(resp.content))
+
+    def test_empty_club(self):
+        self.data['club'] = ''
+        resp = self.client.patch(self.url, data=self.data, format='json')
+        self.assertEqual(resp.status_code, 400)
+        self.assertIn('club', str(resp.content))
