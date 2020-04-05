@@ -19,7 +19,6 @@ class Login extends Component {
 
     handleChange = e => {
         this.setState({ [e.target.name]: e.target.value });
-        console.log(this.state);
     };
 
     getCookie(name) {
@@ -44,12 +43,12 @@ class Login extends Component {
         let form_data = new FormData();
         let csrftoken = this.getCookie('csrftoken');
 
-        form_data.set('username', this.state.username);
-        form_data.set('password', this.state.password);
+        form_data.append('username', this.state.username);
+        form_data.append('password', this.state.password);
 
         axios.defaults.xsrfCookieName = 'csrftoken';
         axios.defaults.xsrfHeaderName = 'X-CSRFToken';
-        //axios.defaults.withCredentials = true;
+        axios.defaults.withCredentials = true;
 
         console.log(form_data);
         axios({
@@ -57,14 +56,14 @@ class Login extends Component {
             url: API_URL,
             headers: {
                 Accept: 'application/json',
-                'Content-Type': 'application/x-www-form-urlencoded',
+                'Content-Type': 'multipart/form-data',
                 'X-CSRFToken': csrftoken
             },
-            data: this.form_data
+            data: form_data
         })
             .then(response => {
                 console.log(response);
-                //this.setState({ redirect: true });
+                this.setState({ redirect: true });
             })
             .catch(response => {
                 //handle error

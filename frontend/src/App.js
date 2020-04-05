@@ -7,7 +7,7 @@ import UserArea from './components/userArea/userArea';
 import TopBar from './components/topBar/topBar';
 import Footer from './components/footer/footer';
 
-import { Provider } from 'react-redux';
+// import { Provider } from 'react-redux';
 
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 

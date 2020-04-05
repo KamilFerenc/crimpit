@@ -6,6 +6,7 @@ import axios from 'axios';
 import './register.scss';
 
 const API_URL = 'http://localhost:8001/api/register/';
+const API_URL_edit_profile = 'http://localhost:8001/api/users/id';
 
 class Register extends Component {
     constructor(props) {
