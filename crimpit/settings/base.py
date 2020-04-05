@@ -168,3 +168,10 @@ CORS_ORIGIN_WHITELIST = [
 REST_AUTH_SERIALIZERS = {
     'USER_DETAILS_SERIALIZER': 'crimpit.accounts.serializers.CustomUserSerializer',
 }
+CORS_ORIGIN_ALLOW_ALL = True
+
+CSRF_COOKIE_NAME = "csrftoken"
+
+CORS_ALLOW_CREDENTIALS = True
+
+CSRF_TRUSTED_ORIGINS = ['https://localhost:3001']

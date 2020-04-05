@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { NavLink } from 'react-router-dom';
 import './landingPage.scss';
 import crimpImage from '../../images/crimp.png';
 import measureImage from '../../images/measure.png';
@@ -23,6 +24,7 @@ class LandingPage extends Component {
                             <img
                                 src={crimpImage}
                                 className="ci-landing-page__feature-image"
+                                alt=""
                             ></img>
                         </div>
                         <div className="col ci-landing-page__feature">
@@ -32,6 +34,7 @@ class LandingPage extends Component {
                             <img
                                 src={measureImage}
                                 className="ci-landing-page__feature-image"
+                                alt=""
                             ></img>
                         </div>
                         <div className="col ci-landing-page__feature">
@@ -41,17 +44,19 @@ class LandingPage extends Component {
                             <img
                                 src={progressImage}
                                 className="ci-landing-page__feature-image"
+                                alt=""
                             ></img>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col ci-landing-page__features-signup">
-                            <button
-                                className="btn btn-outline-primary ci-landing-navigation__login-button m-2"
-                                type="button"
+                            <NavLink
+                                to={'register'}
+                                activeClassName=""
+                                className="btn btn-outline-primary ci-landing-navigation__button"
                             >
-                                Sign Up
-                            </button>
+                                Register
+                            </NavLink>
                         </div>
                     </div>
                 </div>
