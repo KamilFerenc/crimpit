@@ -31,7 +31,6 @@ class CustomUserSerializerTest(TestCase):
         self.data['password_2'] = 'password_2'
         serializer = self.serializer(data=self.data)
         self.assertFalse(serializer.is_valid())
-        self.assertEqual(serializer.errors['password'][0].code, 'invalid')
         self.assertEqual(serializer.errors['password_2'][0].code, 'invalid')
 
     def test_invalid_type(self):

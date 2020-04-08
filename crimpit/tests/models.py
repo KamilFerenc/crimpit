@@ -69,7 +69,7 @@ class HangboardTestSet(TestSet):
 class Exercise(TimeStampModel):
     title = models.CharField(verbose_name=_('Title'), max_length=255)
     creator = models.ForeignKey('accounts.CustomUser', verbose_name=_('Creator'), on_delete=models.CASCADE)
-    exercise_type = models.CharField(verbose_name=_('Level'), max_length=255,
+    exercise_type = models.CharField(verbose_name=_('Exercise type'), max_length=255,
                                      default=HANGBOARD, choices=TYPE_CHOICES)
     image = models.ImageField(verbose_name=_('Image'), blank=True,
                               help_text=_('Add image how exercise should look like'))
@@ -88,7 +88,7 @@ class Exercise(TimeStampModel):
 
 class CampusExerciseManager(models.Manager):
     def get_queryset(self, *args, **kwargs):
-        return super(CampusExerciseManager, self).get_queryset().filter(test_type=CAMPUS_BOARD, *args, **kwargs)
+        return super(CampusExerciseManager, self).get_queryset().filter(exercise_type=CAMPUS_BOARD, *args, **kwargs)
 
 
 class CampusExercise(Exercise):
@@ -97,12 +97,12 @@ class CampusExercise(Exercise):
         verbose_name = _('Campus Exercise')
         verbose_name_plural = _('Campus Exercises')
 
-    objects = CampusExerciseManager
+    objects = CampusExerciseManager()
 
 
 class HangboardExerciseManager(models.Manager):
     def get_queryset(self, *args, **kwargs):
-        return super(HangboardExerciseManager, self).get_queryset().filter(test_type=HANGBOARD, *args, **kwargs)
+        return super(HangboardExerciseManager, self).get_queryset().filter(exercise_type=HANGBOARD, *args, **kwargs)
 
 
 class HangboardExercise(Exercise):
