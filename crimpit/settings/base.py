@@ -42,10 +42,13 @@ INSTALLED_APPS = [
     'django_extensions',
     'rest_framework',
     'corsheaders',
+    'rest_framework.authtoken',
+    'rest_auth',
 ]
 
 PROJECT_APPS = [
     'crimpit.accounts',
+    'crimpit.tests',
 ]
 
 INSTALLED_APPS += PROJECT_APPS
@@ -142,18 +145,26 @@ STATICFILES_DIRS = [
 MEDIA_ROOT = PROJECT_DIR.joinpath('media')
 MEDIA_URL = '/media/'
 
-LOGIN_REDIRECT_URL = 'trainers-list'
-
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated'
     ),
+
     'DEFAULT_PARSER_CLASSES': [
         'rest_framework.parsers.JSONParser',
         'rest_framework.parsers.MultiPartParser',
+    ],
+
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
     ]
 }
 
 CORS_ORIGIN_WHITELIST = [
     'https://localhost:3001',
 ]
+
+REST_AUTH_SERIALIZERS = {
+    'USER_DETAILS_SERIALIZER': 'crimpit.accounts.serializers.CustomUserSerializer',
+}

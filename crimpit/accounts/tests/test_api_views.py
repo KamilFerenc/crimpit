@@ -1,3 +1,5 @@
+import json
+
 from django.test import TestCase
 from django.urls import reverse
 from rest_framework.test import APIClient
@@ -7,7 +9,7 @@ from crimpit.accounts.models import TRAINER, CustomUser, ATHLETE
 from crimpit.helpers.tests.mixin import ViewTestMixin
 
 
-class CreateUserApiTest(TestCase, APIClient):
+class CreateUserApiTest(ViewTestMixin, TestCase, APIClient):
     def setUp(self):
         self.client = APIClient()
         self.data = {
@@ -18,6 +20,13 @@ class CreateUserApiTest(TestCase, APIClient):
             'type': TRAINER,
             'club': 'KS KORONA'
         }
+
+    def test_login(self):
+        user = CustomUserFactory(username='test', password='test')
+        resp = self.client.post(reverse('rest_login'), data={'username': 'test', 'password': 'test'})
+        self.assert_resp_ok(resp)
+        result = json.loads(resp.content)
+        self.assertEqual(result['key'], user.auth_token.key)
 
     def test_get_request(self):
         resp = self.client.get(reverse('register'))
@@ -54,7 +63,7 @@ class AthletesListTest(TestCase, APIClient):
         self.client = APIClient()
 
     def test_get_request(self):
-        resp = self.client.get(reverse('athletes-list'))
+        resp = self.client.get(reverse('athletes_list'))
         self.assertEqual(resp.status_code, 403)
 
 
@@ -68,7 +77,7 @@ class DetailUpdateUserApiViewTest(ViewTestMixin, TestCase, APIClient):
         self.user = CustomUserFactory(profile_photo=self.tmp_file.name)
         self.client = APIClient()
         self.login(self.user)
-        self.url = reverse('user-detail', kwargs={'pk': self.user.pk})
+        self.url = reverse('user_detail', kwargs={'pk': self.user.pk})
 
     def test_valid_data(self):
         resp = self.client.patch(self.url, data=self.data, format='multipart')
