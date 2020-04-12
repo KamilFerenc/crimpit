@@ -6,7 +6,7 @@ class Footer extends Component {
         return (
             <footer className="footer mt-auto py-3 bg-light">
                 <div className="container">
-                    <span className="text-muted">Copiright: The Fernenz</span>
+                    <span className="text-muted">Copyright: The Fernenz</span>
                 </div>
             </footer>
         );

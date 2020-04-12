@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import { Col, Row, Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import { Redirect } from 'react-router-dom';
 import axios from 'axios';
+import { getCookie } from '../getCookie/getCookie';
 
 import './login.scss';
 
-const API_URL = 'http://localhost:8001/api-auth/login/';
+const API_URL = 'http://localhost:8001/api/login/';
 
 class Login extends Component {
     constructor(props) {
@@ -14,7 +15,6 @@ class Login extends Component {
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.getCookie = this.getCookie.bind(this);
     }
 
     handleChange = e => {
@@ -22,20 +22,7 @@ class Login extends Component {
     };
 
     getCookie(name) {
-        var cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            var cookies = document.cookie.split(';');
-            for (var i = 0; i < cookies.length; i++) {
-                var cookie = cookies[i].trim();
-                if (cookie.substring(0, name.length + 1) === name + '=') {
-                    cookieValue = decodeURIComponent(
-                        cookie.substring(name.length + 1)
-                    );
-                    break;
-                }
-            }
-        }
-        return cookieValue;
+        return getCookie(name);
     }
 
     handleSubmit = e => {
@@ -50,7 +37,6 @@ class Login extends Component {
         axios.defaults.xsrfHeaderName = 'X-CSRFToken';
         axios.defaults.withCredentials = true;
 
-        console.log(form_data);
         axios({
             method: 'post',
             url: API_URL,
@@ -60,15 +46,12 @@ class Login extends Component {
                 'X-CSRFToken': csrftoken
             },
             data: form_data
-        })
-            .then(response => {
-                console.log(response);
+        }).then(response => {
+            if (response.key !== '') {
+                localStorage.setItem('token', response.data['key']);
                 this.setState({ redirect: true });
-            })
-            .catch(response => {
-                //handle error
-                console.log(response);
-            });
+            }
+        });
     };
 
     defaultIfEmpty = value => {

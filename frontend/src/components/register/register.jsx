@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+
 import { Col, Row, Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import { Redirect } from 'react-router-dom';
 import axios from 'axios';
@@ -6,7 +7,6 @@ import axios from 'axios';
 import './register.scss';
 
 const API_URL = 'http://localhost:8001/api/register/';
-const API_URL_edit_profile = 'http://localhost:8001/api/users/id';
 
 class Register extends Component {
     constructor(props) {
@@ -23,13 +23,38 @@ class Register extends Component {
             profile_photo: null,
             phone: '',
             city: '',
-            redirect: false
+            redirect: false,
+
+            errors: {
+                username: false,
+                password_2: false
+            }
         };
 
         this.handleChange = this.handleChange.bind(this);
         this.handleImageChange = this.handleImageChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
+
+    defaultIfEmpty = value => {
+        return value === '' ? '' : value;
+    };
+
+    messages = {
+        username: 'This user name already exists',
+        password_2: 'Password is not matching confirm password'
+    };
+
+    showErrorMessages = inputName => {
+        this.setState({ errors: { [inputName]: true } });
+        console.log('show');
+        console.log('show');
+        console.log(this.state.errors);
+    };
+
+    hideErrorMessages = inputName => {
+        this.setState({ errors: { [inputName]: false } });
+    };
 
     handleChange = e => {
         this.setState({ [e.target.name]: e.target.value });
@@ -39,12 +64,12 @@ class Register extends Component {
         this.setState({
             profile_photo: e.target.files[0]
         });
-
-        console.log(e.target.files);
     };
 
     handleSubmit = e => {
         e.preventDefault();
+
+        this.showErrorMessages('username');
         let form_data = new FormData();
 
         form_data.append(
@@ -89,10 +114,6 @@ class Register extends Component {
             });
     };
 
-    defaultIfEmpty = value => {
-        return value === '' ? '' : value;
-    };
-
     render() {
         const redirect = this.state.redirect;
         if (redirect === true) {
@@ -114,6 +135,11 @@ class Register extends Component {
                                         this.state.username
                                     )}
                                 />
+                                {this.state.errors.username && (
+                                    <span className="ci-register__error-span">
+                                        {this.messages.username_exists}
+                                    </span>
+                                )}
                             </FormGroup>
                         </Col>
                         <Col md={6}>
@@ -156,6 +182,11 @@ class Register extends Component {
                                         this.state.password_2
                                     )}
                                 />
+                                {this.state.errors.password_2 && (
+                                    <span className="ci-register__error-span">
+                                        {this.messages.passwords_not_matching}
+                                    </span>
+                                )}
                             </FormGroup>
                         </Col>
                     </Row>

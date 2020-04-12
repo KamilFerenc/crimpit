@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
-import profileImg from '../../images/profile.png';
 import { NavLink } from 'react-router-dom';
+import ProfilePhoto from '../profilePhoto/profilePhoto';
 
 import './asideNav.scss';
 
@@ -11,11 +11,7 @@ class asideNav extends Component {
         return (
             <div className="ci-user-area__aside-nav col-3">
                 <div className="ci-aside-nav">
-                    Aside Nav
-                    <div className="ci-aside-nav__item ci-aside-nav__item--picture-container">
-                        {' '}
-                        <img src={profileImg} alt="" />
-                    </div>
+                    <ProfilePhoto />
                     <div className="ci-aside-nav__item ci-aside-nav__item--edit-profile">
                         <NavLink
                             to="edit-profile"

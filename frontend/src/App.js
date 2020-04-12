@@ -6,6 +6,7 @@ import LandingPage from './components/landingPage/landingPage';
 import UserArea from './components/userArea/userArea';
 import TopBar from './components/topBar/topBar';
 import Footer from './components/footer/footer';
+import Logout from './components/logout/logout';
 
 // import { Provider } from 'react-redux';
 
@@ -35,6 +36,7 @@ function App() {
                     <NavRoute path="/register" component={Register} />
                     <NavRoute path="/user-area" component={UserArea} />
                     <NavRoute path="/edit-profile" component={UserArea} />
+                    <NavRoute path="/logout" component={Logout} />
                     {/* <NavRoute component={Page404} /> */}
                 </Switch>
             </Router>
