@@ -5,12 +5,13 @@ from django.contrib import admin
 
 api_urls = [
     url(r'', include('crimpit.accounts.urls')),
+    url(r'', include('crimpit.tests.urls')),
 ]
 
 urlpatterns = [
     url(r'admin/', admin.site.urls),
     url(r'api/', include(api_urls)),
-    url(r'api-auth/', include('rest_framework.urls'))
+    url('api/', include('rest_auth.urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

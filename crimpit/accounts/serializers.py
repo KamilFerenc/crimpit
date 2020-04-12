@@ -12,18 +12,14 @@ class CustomUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ('username', 'email', 'password', 'password_2', 'type', 'club', 'birth_date', 'start_climbing',
+        fields = ('id', 'username', 'email', 'password', 'password_2', 'type', 'club', 'birth_date', 'start_climbing',
                   'profile_photo', 'phone', 'city')
 
-    def validate(self, data):
-        password = data.get('password', None)
-        password_2 = data.get('password_2', None)
+    def validate_password_2(self, password_2):
+        password = self.initial_data.get('password', None)
         if password != password_2:
-            raise serializers.ValidationError({
-                'password': 'Password don\'t match.',
-                'password_2': 'Password don\'t match.'
-            })
-        return data
+            raise serializers.ValidationError('Password don\'t match.')
+        return password_2
 
     def create(self, validated_data):
         validated_data.pop('password_2')

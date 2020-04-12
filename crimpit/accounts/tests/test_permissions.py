@@ -19,19 +19,19 @@ class IsOwnerOrReadOnlyTest(ViewTestMixin, TestCase, APIClient):
 
     def test_patch_owner(self):
         self.login(self.owner)
-        resp = self.client.patch(reverse('user-detail', kwargs={'pk': self.owner.pk}), data=self.data)
+        resp = self.client.patch(reverse('user_detail', kwargs={'pk': self.owner.pk}), data=self.data)
         self.assert_resp_ok(resp)
         self.owner.refresh_from_db()
         self.assertEqual(self.owner.club, self.data['club'])
 
     def test_patch_user(self):
         self.login(self.user)
-        resp = self.client.patch(reverse('user-detail', kwargs={'pk': self.owner.pk}), data=self.data)
+        resp = self.client.patch(reverse('user_detail', kwargs={'pk': self.owner.pk}), data=self.data)
         self.assertEqual(resp.status_code, 403)
 
     def test_get_user(self):
         self.login(self.user)
-        resp = self.client.get(reverse('user-detail', kwargs={'pk': self.owner.pk}))
+        resp = self.client.get(reverse('user_detail', kwargs={'pk': self.owner.pk}))
         result = json.loads(resp.content)
         self.assert_resp_ok(resp)
         self.assertEqual(result['username'], self.owner.username)

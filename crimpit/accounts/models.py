@@ -43,9 +43,8 @@ class AthleteManager(BaseUserManager):
 class Athlete(CustomUser):
     class Meta:
         proxy = True
-
-    verbose_name = _('Athlete')
-    verbose_name_plural = _('Athletes')
+        verbose_name = _('Athlete')
+        verbose_name_plural = _('Athletes')
 
     objects = AthleteManager()
 
