@@ -1,9 +1,9 @@
 from rest_framework import permissions
 
 
-class IsOwnerOrReadOnly(permissions.IsAuthenticated):
+class IsCreatorOrReadOnly(permissions.IsAuthenticated):
     """
-    Custom permission to only allow owners of an object to edit it.
+    Custom permission to only allow creator of an object to edit it.
     """
 
     def has_object_permission(self, request, view, obj):
@@ -12,4 +12,5 @@ class IsOwnerOrReadOnly(permissions.IsAuthenticated):
         if request.method in permissions.SAFE_METHODS:
             return True
 
-        return obj == request.user
+        # Write permissions are only allowed to the creator of the test/exercise.
+        return obj.creator == request.user
