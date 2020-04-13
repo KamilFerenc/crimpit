@@ -1,9 +1,12 @@
-from django.test import TestCase
+from django.test import TestCase, RequestFactory
 
 from django.utils import timezone
 
+from crimpit.accounts.factories import CustomUserFactory
 from crimpit.accounts.models import TRAINER
-from crimpit.accounts.serializers import CustomUserSerializer
+from crimpit.accounts.serializers import CustomUserSerializer, AddTestSerializer, DeleteTestSerializer
+from crimpit.tests.factories import TestSetFactory
+from crimpit.tests.models import TestSet
 
 
 class CustomUserSerializerTest(TestCase):
@@ -56,3 +59,68 @@ class CustomUserSerializerTest(TestCase):
         serializer = self.serializer(data=self.data)
         self.assertFalse(serializer.is_valid())
         self.assertEqual(serializer.errors['birth_date'][0].code, 'datetime')
+
+
+class AddTestSerializerTest(TestCase):
+    def setUp(self) -> None:
+        self.user = CustomUserFactory()
+        self.test = TestSetFactory()
+        self.data = {
+            'tests': [self.test.pk]
+        }
+        self.serializer = AddTestSerializer
+        self.request = RequestFactory()
+        self.request.user = self.user
+        self.context = {
+            "request": self.request,
+        }
+
+    def test_valid_data(self):
+        self.assertEqual(self.user.tests.count(), 0)
+        serializer = self.serializer(instance=self.user, data=self.data, context=self.context)
+        self.assertTrue(serializer.is_valid())
+        serializer.save()
+        self.user.refresh_from_db()
+        self.assertEqual(self.user.tests.count(), 1)
+        self.assertEqual(self.user.tests.first(), self.test)
+
+    def test_invalid_data_test_not_exists(self):
+        self.data['tests'] = [TestSet.objects.count() + 1]
+        self.assertEqual(self.user.tests.count(), 0)
+        serializer = self.serializer(instance=self.user, data=self.data, context=self.context)
+        self.assertFalse(serializer.is_valid())
+        self.assertIn('tests', serializer.errors)
+        self.assertEqual(serializer.errors['tests'][0].code, 'does_not_exist')
+
+
+class DeleteTestSerializerTest(TestCase):
+    def setUp(self) -> None:
+        self.test = TestSetFactory()
+        self.user = CustomUserFactory(tests=[self.test])
+        self.data = {
+            'tests': [self.test.pk]
+        }
+        self.serializer = DeleteTestSerializer
+        self.request = RequestFactory()
+        self.request.user = self.user
+        self.context = {
+            "request": self.request,
+        }
+
+    def test_valid_data(self):
+        self.assertEqual(self.user.tests.count(), 1)
+        self.assertEqual(self.user.tests.first(), self.test)
+        serializer = self.serializer(instance=self.user, data=self.data, context=self.context)
+        self.assertTrue(serializer.is_valid())
+        serializer.save()
+        self.user.refresh_from_db()
+        self.assertEqual(self.user.tests.count(), 0)
+
+    def test_invalid_data_test_not_exists(self):
+        self.data['tests'] = [TestSet.objects.count() + 1]
+        self.assertEqual(self.user.tests.count(), 1)
+        serializer = self.serializer(instance=self.user, data=self.data, context=self.context)
+        self.assertFalse(serializer.is_valid())
+        self.assertIn('tests', serializer.errors)
+        self.assertEqual(serializer.errors['tests'][0].code, 'does_not_exist')
+        self.assertEqual(self.user.tests.count(), 1)

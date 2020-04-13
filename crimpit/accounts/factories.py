@@ -18,3 +18,11 @@ class CustomUserFactory(UserFactory):
         model = CustomUser
 
     club = factory.Sequence(lambda n: f'Club_{n}')
+
+    @factory.post_generation
+    def tests(self, create, extracted, **kwargs):
+        if not create:
+            return
+        if extracted:
+            for test in extracted:
+                self.tests.add(test)

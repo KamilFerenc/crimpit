@@ -8,6 +8,7 @@ from crimpit.accounts.models import Athlete, Trainer
 class AthleteAdmin(BaseUserAdmin):
     list_display = ('username', 'email',)
     readonly_fields = ('last_login', 'date_joined',)
+    filter_horizontal = ('tests',)
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
         (_('Personal info'), {'fields': ('first_name', 'last_name', 'email')}),
@@ -16,6 +17,7 @@ class AthleteAdmin(BaseUserAdmin):
         (_('Permissions'), {'classes': ('collapse',),
                             'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
         (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
+        (_('Related object'), {'fields': ('tests',)})
     )
 
 
