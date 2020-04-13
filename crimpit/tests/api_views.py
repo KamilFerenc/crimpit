@@ -1,9 +1,13 @@
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateAPIView
+from rest_framework import status
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateAPIView, UpdateAPIView
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
-from crimpit.accounts.permissions import IsOwnerOrReadOnly
-from crimpit.tests.models import CampusTestSet, HangboardTestSet, CampusExercise, HangboardExercise
-from crimpit.tests.serializers import TestSetSerializer, ExerciseSerializer
+from crimpit.tests.permissions import IsCreatorOrReadOnly
+from crimpit.tests.models import CampusTestSet, HangboardTestSet, CampusExercise, HangboardExercise, TestSet
+from crimpit.tests.serializers import (
+    TestSetSerializer, ExerciseSerializer, AddExerciseSerializer, DeleteExerciseSerializer
+)
 
 
 class BaseTestSetApiView(ListCreateAPIView):
@@ -26,7 +30,7 @@ hangboard_test_set = HangboardTestSetApiView.as_view()
 
 
 class BaseTestSetDetailView(RetrieveUpdateAPIView):
-    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
+    permission_classes = [IsCreatorOrReadOnly]
     serializer_class = TestSetSerializer
 
 
@@ -64,7 +68,7 @@ hangboard_exercise = HangboardExerciseApiView.as_view()
 
 
 class BaseExerciseDetailView(RetrieveUpdateAPIView):
-    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
+    permission_classes = [IsCreatorOrReadOnly]
     serializer_class = ExerciseSerializer
 
 
@@ -80,3 +84,42 @@ class HangboardExerciseDetailApiView(BaseExerciseDetailView):
 
 
 hangboard_exercise_detail = HangboardExerciseDetailApiView.as_view()
+
+
+class AddExerciseApiView(UpdateAPIView):
+    queryset = TestSet.objects.all()
+    permission_classes = [IsCreatorOrReadOnly]
+    serializer_class = AddExerciseSerializer
+
+    def get_serializer_context(self):
+        context = super(AddExerciseApiView, self).get_serializer_context()
+        context.update({
+            'test_type': self.get_object().test_type,
+        })
+        return context
+
+    def patch(self, request, pk):
+        serializer = self.serializer_class(instance=self.get_object(),
+                                           data=request.data,
+                                           context=self.get_serializer_context())
+        if serializer.is_valid(raise_exception=True):
+            instance = serializer.save()
+            return Response(TestSetSerializer(instance).data, status=status.HTTP_200_OK)
+
+
+add_exercise = AddExerciseApiView.as_view()
+
+
+class DeleteExerciseApiView(UpdateAPIView):
+    queryset = TestSet.objects.all()
+    permission_classes = [IsCreatorOrReadOnly]
+    serializer_class = DeleteExerciseSerializer
+
+    def patch(self, request, pk):
+        serializer = self.serializer_class(instance=self.get_object(), data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            instance = serializer.save()
+            return Response(TestSetSerializer(instance).data, status=status.HTTP_200_OK)
+
+
+delete_exercise = DeleteExerciseApiView.as_view()

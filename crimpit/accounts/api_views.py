@@ -1,10 +1,9 @@
-from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveUpdateAPIView
+from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveUpdateAPIView, UpdateAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from rest_framework.response import Response
 
 from crimpit.accounts.models import Athlete, Trainer, CustomUser
 from crimpit.accounts.permissions import IsOwnerOrReadOnly
-from crimpit.accounts.serializers import CustomUserSerializer
+from crimpit.accounts.serializers import CustomUserSerializer, AddTestSerializer, DeleteTestSerializer
 
 
 class CreateUserApiView(CreateAPIView):
@@ -20,11 +19,6 @@ class AthletesList(ListAPIView):
     serializer_class = CustomUserSerializer
     permission_classes = [IsAuthenticated]
 
-    def list(self, request, *args, **kwargs):
-        queryset = self.get_queryset()
-        serializer = CustomUserSerializer(queryset, many=True)
-        return Response(serializer.data)
-
 
 athletes_list_api_view = AthletesList.as_view()
 
@@ -37,9 +31,27 @@ trainers_list_api_view = TrainersList.as_view()
 
 
 class DetailUpdateUserApiView(RetrieveUpdateAPIView):
-    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
+    permission_classes = [IsOwnerOrReadOnly]
     serializer_class = CustomUserSerializer
     queryset = CustomUser.objects.all()
 
 
 detail_update_user_api_view = DetailUpdateUserApiView.as_view()
+
+
+class AddTestApiView(UpdateAPIView):
+    serializer_class = AddTestSerializer
+    permission_classes = [IsOwnerOrReadOnly]
+
+    def get_object(self):
+        return self.request.user
+
+
+add_test = AddTestApiView.as_view()
+
+
+class DeleteTestApiView(AddTestApiView):
+    serializer_class = DeleteTestSerializer
+
+
+delete_test = DeleteTestApiView.as_view()

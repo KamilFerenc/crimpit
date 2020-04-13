@@ -30,6 +30,8 @@ class CustomUser(AbstractUser):
     phone = models.CharField(verbose_name=_('Phone number'), max_length=16, blank=True)
     city = models.CharField(verbose_name=_('City'), max_length=20, blank=True)
     athletes = models.ManyToManyField('self', verbose_name=_('Athletes'), related_name='athletes')
+    tests = models.ManyToManyField('tests.TestSet', verbose_name=_('Collection of tests'),
+                                   related_name='users')
 
     def __str__(self):
         return f"{self.pk} - {self.username}"

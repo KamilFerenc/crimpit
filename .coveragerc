@@ -1,0 +1,8 @@
+[report]
+precision = 1
+show_missing = True
+omit =
+    */migrations/*
+    */settings/*
+    */__init__.py
+    */manage.py
