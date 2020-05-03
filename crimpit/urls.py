@@ -5,6 +5,7 @@ from django.contrib import admin
 
 api_urls = [
     url(r'', include('crimpit.accounts.urls')),
+    url(r'', include('crimpit.results.urls')),
     url(r'', include('crimpit.tests.urls')),
 ]
 

@@ -19,14 +19,14 @@ class ExerciseSerializer(serializers.ModelSerializer):
         fields = ['id', 'title', 'creator', 'exercise_type', 'image', 'private', 'description']
 
 
-class ExerciseFiled(serializers.PrimaryKeyRelatedField):
+class ExerciseField(serializers.PrimaryKeyRelatedField):
     def get_queryset(self):
         queryset = Exercise.objects.filter(exercise_type=self.context.get('test_type', None))
         return queryset
 
 
 class AddExerciseSerializer(serializers.ModelSerializer):
-    exercises = ExerciseFiled(many=True)
+    exercises = ExerciseField(many=True)
 
     class Meta:
         model = TestSet

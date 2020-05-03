@@ -3,7 +3,7 @@ import os
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from crimpit.accounts.validators import validate_birth_date, validate_start_climbing
 
@@ -29,7 +29,7 @@ class CustomUser(AbstractUser):
                                       upload_to=PROFILE_PHOTO_UPLOAD_FOLDER)
     phone = models.CharField(verbose_name=_('Phone number'), max_length=16, blank=True)
     city = models.CharField(verbose_name=_('City'), max_length=20, blank=True)
-    athletes = models.ManyToManyField('self', verbose_name=_('Athletes'), related_name='athletes')
+    athletes = models.ManyToManyField('self', verbose_name=_('Athletes'), related_name='trainers')
     tests = models.ManyToManyField('tests.TestSet', verbose_name=_('Collection of tests'),
                                    related_name='users')
 

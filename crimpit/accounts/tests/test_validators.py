@@ -1,6 +1,6 @@
+from django.core.exceptions import ValidationError
 from django.test import TestCase
 from django.utils import timezone
-from rest_framework.exceptions import ValidationError
 
 from crimpit.accounts.validators import validate_birth_date, validate_start_climbing
 

@@ -26,3 +26,11 @@ class CustomUserFactory(UserFactory):
         if extracted:
             for test in extracted:
                 self.tests.add(test)
+
+    @factory.post_generation
+    def athletes(self, create, extracted, **kwargs):
+        if not create:
+            return
+        if extracted:
+            for athlete in extracted:
+                self.athletes.add(athlete)

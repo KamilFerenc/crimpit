@@ -1,9 +1,10 @@
 import json
 
-from django.test import TestCase
+from django.test import TestCase, RequestFactory
 from django.urls import reverse
 from rest_framework.test import APIClient
 
+from crimpit.accounts.api_views import AddTestApiView
 from crimpit.accounts.factories import CustomUserFactory
 from crimpit.accounts.models import TRAINER, CustomUser, ATHLETE
 from crimpit.helpers.tests.mixin import ViewTestMixin
@@ -97,3 +98,15 @@ class DetailUpdateUserApiViewTest(ViewTestMixin, TestCase, APIClient):
         resp = self.client.patch(self.url, data=self.data, format='json')
         self.assertEqual(resp.status_code, 400)
         self.assertIn('club', str(resp.content))
+
+
+class AddTestApiViewTest(ViewTestMixin, TestCase, APIClient):
+    def setUp(self) -> None:
+        self.user = CustomUserFactory()
+        self.request = RequestFactory()
+        self.request.user = self.user
+
+    def test_get_obj(self):
+        view = AddTestApiView()
+        view.setup(self.request)
+        self.assertEqual(view.get_object(), self.user)
